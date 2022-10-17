@@ -140,3 +140,6 @@ EMAIL_HOST_PASSWORD = '@StellarWall123'
 EMAIL_FILE_PATH = Path(BASE_DIR, 'emails')
 
 DEFAULT_FROM_EMAIL = 'support@stellarwall.xyz'
+
+
+AUTH_USER_MODEL = 'api.User'

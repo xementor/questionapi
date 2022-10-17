@@ -1,9 +1,11 @@
 ## Oct 13 2022
 x models entry added
 x fixed media root and url pattern
-- let check admin django implementation
-- now make some api view for
+x let check admin django implementation
+x now make some api view for
     - questions
     - comments
     - users
     - logging
+
+- implement auth in the url

@@ -1,14 +1,19 @@
-from email.policy import default
-from pydoc import describe
 from django.db import models
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.auth.models import AbstractUser
+
+
+class User(AbstractUser):
+    email = models.EmailField(unique=True)
 
 # Create your models here.
 class Student(models.Model):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=55)
     semister = models.IntegerField()
+    user  = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -27,7 +32,7 @@ class Question(models.Model):
     course_code = models.ForeignKey(Course, on_delete=models.CASCADE)
     qimage = models.ImageField(upload_to="questions")
     qtext = models.CharField(max_length=255,null=True, blank=True)
-    student = models.ForeignKey(Student, on_delete=models.PROTECT, default=203153927)
+    student = models.ForeignKey(Student, on_delete=models.PROTECT)
 
     def __str__(self):
         return f'{str(self.course_code)} {self.semister}  {self. year}'
