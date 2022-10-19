@@ -16,7 +16,7 @@ class Student(models.Model):
     user  = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.user.email}"
+        return f"{self.user.first_name} {self.user.last_name}" if self.user.first_name else self.user.email
     
     @admin.display(ordering='user__first_name')
     def first_name(self):

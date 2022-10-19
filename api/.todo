@@ -8,5 +8,10 @@ x now make some api view for
     - users
     - logging
 
-- implement auth in the url
-- learn admin panel editinf for models.
+x implement auth in the url
+x learn admin panel editinf for models.
+
+
+OCT 19
+x fixed student name and comment
+- question-details should be protected only for owner.

@@ -42,7 +42,7 @@ class QuestionViewSet(ModelViewSet):
             serializer = QuestionSerializer(questions, many=True)
             return Response(serializer.data)
         if request.method ==  'POST':
-            serializer = QuestionSerializer(data=request.data)
+            serializer = QuestionSerializer(data=request.data, context={'user_id' :  request.user.id})
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
@@ -74,19 +74,24 @@ class CourseViewSet(ModelViewSet):
 
 
 class CommentViewSet(ModelViewSet):
-    # queryset = QComment.objects.all()
     serializer_class = CommentSerializer
     
     def get_queryset(self):
         return QComment.objects.filter(question_id=self.kwargs['question_pk'])
 
     def get_serializer_context(self):
-        return {'question_id': self.kwargs['question_pk']}
+        return {'question_id': self.kwargs['question_pk'], 'user_id': self.request.user.id}
 
 
 class CommentCommentViewSet(ModelViewSet):
     queryset = CComment.objects.all()
     serializer_class = CComentSerializer
+
+    def get_queryset(self):
+        return CComment.objects.filter(comment_id=self.kwargs['comment_pk'])
+
+    def get_serializer_context(self):
+        return {'comment_id': self.kwargs['comment_pk'], 'user_id': self.request.user.id}
 
 class StudentViewSet(ModelViewSet):
     queryset = Student.objects.all()
