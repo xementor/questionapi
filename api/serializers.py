@@ -16,8 +16,9 @@ class QuestionSerializer(serializers.ModelSerializer):
         user_id = self.context['user_id']
         (student, created) = Student.objects.get_or_create(user_id=user_id)
         question =  Question(student=student, **validated_data)
+        question.save()
         return question
-
+    
 class CreateQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question

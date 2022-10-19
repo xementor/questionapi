@@ -36,10 +36,15 @@ class QuestionViewSet(ModelViewSet):
 
     @action(detail=False, methods=['GET', 'POST'], permission_classes=[IsAuthenticated])
     def me(self, request):
-        student = Student.objects.get_or_create(student_id = request.user.id)
+        (student, created) = Student.objects.get_or_create(user_id = request.user.id)
         if request.method == 'GET':
-            questions = Question.objects.get(student_id=student.id)
+            questions = Question.objects.filter(student=student)
             serializer = QuestionSerializer(questions, many=True)
+            return Response(serializer.data)
+        if request.method ==  'POST':
+            serializer = QuestionSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
             return Response(serializer.data)
         
 
