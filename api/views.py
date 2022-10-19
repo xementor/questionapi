@@ -1,16 +1,19 @@
 from django.shortcuts import get_object_or_404, render, HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.decorators import action
 from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import permissions
 from rest_framework.views import APIView
 
-from .models import CComment, Course, QComment, Question
-from .serializers import CComentSerializer, CommentSerializer, CourseSerializer, QuestionSerializer
+from .models import CComment, Course, QComment, Question, Student
+from .serializers import CComentSerializer, CommentSerializer, CourseSerializer, CreateQuestionSerializer, QuestionSerializer, StudentSerializer
 
 class QuestionViewSet(ModelViewSet):
     queryset = Question.objects.all()
@@ -19,6 +22,29 @@ class QuestionViewSet(ModelViewSet):
     filterset_fields = ['semister', 'course_code', 'year', 'term']
     search_fields = ['course_code', 'year']
     ordering_fields = ['course_code', 'year']
+
+    def get_serializer_context(self):
+        return {'user_id': self.request.user.id}
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        return [IsAuthenticated()]
+    
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @action(detail=False, methods=['GET', 'POST'], permission_classes=[IsAuthenticated])
+    def me(self, request):
+        student = Student.objects.get_or_create(student_id = request.user.id)
+        if request.method == 'GET':
+            questions = Question.objects.get(student_id=student.id)
+            serializer = QuestionSerializer(questions, many=True)
+            return Response(serializer.data)
+        
+
+            
+        
 
     
 
@@ -56,3 +82,22 @@ class CommentViewSet(ModelViewSet):
 class CommentCommentViewSet(ModelViewSet):
     queryset = CComment.objects.all()
     serializer_class = CComentSerializer
+
+class StudentViewSet(ModelViewSet):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    permission_classes = [IsAdminUser]
+    
+
+    @action(detail=False, methods=['GET', 'PUT'], permission_classes=[IsAuthenticated])
+    def me(self, request):
+        (student, created) = Student.objects.get_or_create(user_id=request.user.id)
+        if request.method == 'GET':
+            serializer = StudentSerializer(student)
+            return Response(serializer.data)
+        elif request.method == 'PUT':
+            serializer = StudentSerializer(student, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            return Response(serializer.data)
+
+

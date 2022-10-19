@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.auth.models import AbstractUser
@@ -11,19 +12,29 @@ class User(AbstractUser):
 # Create your models here.
 class Student(models.Model):
     id = models.BigIntegerField(primary_key=True)
-    name = models.CharField(max_length=55)
     semister = models.IntegerField()
     user  = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return f"{self.user.email}"
+    
+    @admin.display(ordering='user__first_name')
+    def first_name(self):
+        return self.user.first_name
+
+    @admin.display(ordering='user__first_name')
+    def last_name(self):
+        return self.user.last_name
+    
+    class Meta:
+        ordering = ['user__first_name', 'user__last_name']
 
 class Course(models.Model):
     code = models.CharField(max_length=55, primary_key=True)
     name = models.CharField(max_length=55)
 
     def __str__(self):
-        return self.name
+        return self.code
 
 class Question(models.Model):
     semister = models.IntegerField()
