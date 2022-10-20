@@ -12,6 +12,7 @@ from rest_framework import status
 from rest_framework import permissions
 from rest_framework.views import APIView
 
+from api.permissions import IsOwnerOfQuestion
 from .models import CComment, Course, QComment, Question, Student
 from .serializers import CComentSerializer, CommentSerializer, CourseSerializer, CreateQuestionSerializer, QuestionSerializer, StudentSerializer
 
@@ -29,6 +30,8 @@ class QuestionViewSet(ModelViewSet):
     def get_permissions(self):
         if self.request.method == 'GET':
             return [AllowAny()]
+        elif self.request.method in  ['PUT', 'PATCH', 'DELETE']:
+            return [IsOwnerOfQuestion()]
         return [IsAuthenticated()]
     
     def create(self, request, *args, **kwargs):
@@ -49,24 +52,6 @@ class QuestionViewSet(ModelViewSet):
         
 
             
-        
-
-    
-
-class QuestionDetail(ModelViewSet):
-    queryset = Question.objects.all()
-    
-    def get(self, request, id):
-        question = get_object_or_404(Question, pk=id)
-        serializer = QuestionSerializer(question)
-        return Response(serializer.data)
-    
-    def put(self, request, id):
-        question = get_object_or_404(Question, pk=id)
-        serializer = QuestionSerializer(question,data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
 
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
@@ -81,6 +66,13 @@ class CommentViewSet(ModelViewSet):
 
     def get_serializer_context(self):
         return {'question_id': self.kwargs['question_pk'], 'user_id': self.request.user.id}
+    
+    def get_permissions(self):
+        if self.request.method == permissions.SAFE_METHODS:
+            return [AllowAny()]
+        if self.request.method in ['PUT', 'PATCH', 'DELETE']:
+            return [IsOwnerOfQuestion()]
+        return [IsAuthenticated()]
 
 
 class CommentCommentViewSet(ModelViewSet):
@@ -89,6 +81,14 @@ class CommentCommentViewSet(ModelViewSet):
 
     def get_queryset(self):
         return CComment.objects.filter(comment_id=self.kwargs['comment_pk'])
+    
+    def get_permissions(self):
+        if self.request.method == permissions.SAFE_METHODS:
+            return [AllowAny()]
+        if self.request.method in ['PUT', 'PATCH', 'DELETE']:
+            return [IsOwnerOfQuestion()]
+        return [IsAuthenticated()]
+
 
     def get_serializer_context(self):
         return {'comment_id': self.kwargs['comment_pk'], 'user_id': self.request.user.id}
