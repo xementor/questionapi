@@ -1,0 +1,15 @@
+{% extends "../base.html" %}
+
+
+{% block content %}
+    <div class="container">
+        {% include "./post.html" with data=question %}
+        <!-- Comment form -->
+        {% include "./comment_form.html" with data=form_data %}
+        <!-- Comment List -->
+        {% for comment in comments %}
+            {% include "./comment.html" with data=comment %}
+        {% endfor %}
+    </div>
+{% endblock %}
+

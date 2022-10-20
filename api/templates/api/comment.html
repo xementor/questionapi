@@ -1,0 +1,16 @@
+<ol class="list-group list-group-numbered">
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">{{ comment.student }}</div>
+
+        {% if comment.cimage %}
+            <div class="card" style="width: 18rem;">
+                <img src="/media/{{ comment.cimage }}" class="card-img-top" alt="...">
+            </div>
+        {% endif %}
+
+        {{ comment.comment }}
+      </div>
+      <span class="badge bg-primary rounded-pill">14</span>
+    </li>
+</ol>
