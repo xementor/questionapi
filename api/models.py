@@ -74,7 +74,7 @@ class Like(models.Model):
 
     
     def __str__(self):
-        return self.content_type
+        return f"{self.content_type} -> {self.object_id}"
 
 
 
