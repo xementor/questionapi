@@ -1,10 +1,10 @@
-{% extends "../base.html" %}
+{% extends "../base.html"  %}
 
 {% block content %}
     <h2>Question Bank</h2>
     <div class="container">
         <ul>
-            {% for question in object_list %}
+            {% for question in questions %}
                 <a href="/questions/{{ question.id }}">
                     {% include "./post.html" with data=question %} 
                 </a>
@@ -12,3 +12,9 @@
         </ul>
     </div>
 {% endblock %}
+
+{% block user_info %}
+    {% with user=user %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock user_info %}
