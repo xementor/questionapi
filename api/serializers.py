@@ -23,7 +23,8 @@ class QuestionSerializer(serializers.ModelSerializer):
         question.student = student
         question.save()
         return question
-    
+
+   
 class CreateQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question

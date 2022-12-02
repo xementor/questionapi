@@ -12,6 +12,11 @@ x implement auth in the url
 x learn admin panel editinf for models.
 
 
-OCT 19
+OCT 1
 x fixed student name and comment
 - question-details should be protected only for owner.
+
+{
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY3MDA3Mjc5MywianRpIjoiYjlhYWZhOTQwNTM3NDMzNzhkYmEwNTA2NzZjNDQ0NWQiLCJ1c2VyX2lkIjo0fQ.WDDwxm7lM5JRLSVNG838-57jSBA9ufihDU2lzeL_QgU",
+    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjcwNTkxMTkzLCJqdGkiOiIxOGE5YzNmZWZiYTc0MTNhYjk0OGVhNTFmMWU0MDAzMyIsInVzZXJfaWQiOjR9.HfcvumJwnReXi83GOuEP9nEIyAOfv4WudJSJOaSq_tQ"
+}

@@ -1,16 +1,10 @@
-from django.shortcuts import get_object_or_404, render, HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
+from django.shortcuts import get_object_or_404
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.decorators import action
-from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
-from rest_framework.mixins import CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
-from rest_framework.generics import GenericAPIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework import permissions
-from rest_framework.views import APIView
 
 from .models import CComment, Course, QComment, Question, Student
 from .serializers import CComentSerializer, CommentSerializer, CourseSerializer, CreateQuestionSerializer, QuestionSerializer, StudentSerializer
